@@ -1,0 +1,89 @@
+---
+title: "Ridiculously Simple EDA in R"
+output: 
+  html_document: 
+    toc: yes
+---
+
+Exploratory Data Analysis plays a very important role in the entire Data Science Workflow. In fact, this takes most of the time of the Data science Workflow. There's a nice quote (not sure who said it) 
+
+*"In Data Science, 80% of time spent prepare data, 20% of time spent complain about need for prepare data."* 
+
+With R being the go-to language for a lot of Data Analysts, EDA requires an R Programmer to get a couple of packages from the infamous `tidyverse` world into their R code - even for the most basic EDA with some Bar plots and Histograms. 
+
+Recently, I came across this package `DataExplorer` that seems to be doing the entire EDA (at least, the typical basic EDA) with just one function `create_report()` that generates a nice presentable rendered Rmarkdown html document. That's just a report automatically generated and what if you want the control of what you would like to perform EDA on, for which `DataExplorer` has got a couple of *plotting* functions for the same purpose. 
+
+### Let us begin our EDA by loading the library:
+
+```{r}
+library(DataExplorer)
+```
+
+
+### Loading input dataset into our R session for EDA:
+
+```{r}
+choco <- read.csv('C:/Users/SA31/Downloads/flavors_of_cacao.csv', header = T, stringsAsFactors = F)
+
+```
+
+### Some Format changes in the input data. 
+
+```{r, echo = F}
+
+choco$Cocoa.Percent <- as.numeric(gsub('%','',choco$Cocoa.Percent))
+
+choco$Review.Date <- as.character(choco$Review.Date)
+
+```
+
+
+### Variables 
+
+The very first thing that you'd want to do in your EDA is checking the dimension of the input dataset and the time of variables.  
+
+```{r}
+plot_str(choco)
+```
+
+With that, we can see we've got some Continuous variables and some Categorical variables. 
+
+### Man's search for Missing Values
+
+
+```{r}
+plot_missing(choco)
+```
+
+And we are fortunate that there's no missing value in this dataset. 
+
+### Histogram of Continuous Variables
+
+```{r}
+plot_histogram(choco)
+```
+
+### Perhaps, you are a fan of Density plot
+
+```{r}
+plot_density(choco)
+```
+
+### Colorful Correlation Plot
+
+```{r}
+plot_correlation(choco, type = 'continuous','Review.Date')
+```
+
+### Time for some Categorical Variables - Barplots!
+
+```{r}
+plot_bar(choco) 
+```
+
+And finally, if you have got only a couple of minutes (just like in the maggi noodles ad, 2 mins!) just keep it simple to use `create_report()`
+
+```{r}
+#create_report(choco) #comment this if you're not rendering this entire rmarkdown
+```
+
